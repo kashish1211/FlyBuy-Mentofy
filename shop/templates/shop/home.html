@@ -1,0 +1,153 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block style %}
+
+.site-header {
+  background-color: rgba(0, 0, 0, .85);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.site-header a {
+  color: #999;
+  transition: ease-in-out color .15s;
+}
+.site-header a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.product-device {
+  position: absolute;
+  right: 10%;
+  bottom: -30%;
+  width: 300px;
+  height: 540px;
+  background-color: #333;
+  border-radius: 21px;
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+}
+
+.product-device::before {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  bottom: 10%;
+  left: 10px;
+  content: "";
+  background-color: rgba(255, 255, 255, .1);
+  border-radius: 5px;
+}
+
+.product-device-2 {
+  top: -25%;
+  right: auto;
+  bottom: 0;
+  left: 5%;
+  background-color: #e5e5e5;
+}
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+.flex-equal > * {
+  -ms-flex: 1;
+  -webkit-box-flex: 1;
+  flex: 1;
+}
+@media (min-width: 768px) {
+  .flex-md-equal > * {
+    -ms-flex: 1;
+    -webkit-box-flex: 1;
+    flex: 1;
+  }
+}
+
+.overflow-hidden { overflow: hidden; }
+
+{% endblock style %}
+{% block content %}
+
+ <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+      <div class="col-md-5 p-lg-5 mx-auto my-5">
+      {% if user.is_authenticated%}
+        <h1 class="display-4 font-weight-normal">{{ user.username }}</h1>
+      {% else %}
+      <h1 class="display-4 font-weight-normal">Login in to Buy</h1>
+      {% endif %}
+        <p class="lead font-weight-normal">Buy original Apple products at FlyBuy.</p>
+        <a class="btn btn-outline-secondary" href="#">Coming soon</a>
+      </div>
+      <div class="product-device box-shadow d-none d-md-block"></div>
+      <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+<div class="album py-5 bg-light">
+        <div class="container">
+
+          <div class="row">
+          {% for product in products  %}
+          
+          
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <a href="{{ product.id }}/"><img class="card-img-top" src="../media/{{product.image}}" alt="Card image cap"></a>
+                <div class="card-body">
+                <a href="{{ product.id }}/"><h5 class="card-title">{{ product.name }}</h5></a>
+                  <p class="card-text">{{ product.price }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group float-right">
+                      <a href="{{ product.id }}/" class="btn btn-sm btn-outline-secondary float-right">View</a>
+                      
+                      <a type="submit" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'add-to-cart' product.id%} " >Add to Cart</a>
+                      {% comment %} <a type="submit" class="btn btn-sm btn-outline-danger" href="{% url 'remove-from-cart' product.id%}">Remove from cart</a> {% endcomment %}
+                      
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          {% endfor %}
+      </div>
+        </div>
+      </div>
+
+
+  {% comment %} Pagination {% endcomment %}
+  {% if products.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+      <li class='page-item'><a class='page-link' href="?page={{ products.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      {% comment %} <li class="disabled"><span class='page-link'>&laquo;</span></li> {% endcomment %}
+    {% endif %}
+    {% for i in products.paginator.page_range %}
+      {% if products.number == i %}
+        <li class=" page-item active"><span class='page-link'>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li class='page-item'><a class='page-link' href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if products.has_next %}
+      <li  class='page-item'><a class='page-link' href="?page={{ products.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      {% comment %} <li class="disabled"><span class='page-link'>&raquo;</span></li> {% endcomment %}
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

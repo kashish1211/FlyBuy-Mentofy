@@ -1,0 +1,543 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block style %}
+
+
+{% comment %} 
+body{
+    background:#eee;
+}
+h3 {
+    font-size: 16px;
+}
+.text-navy {
+    color: #1ab394;
+}
+.cart-product-imitation {
+  text-align: center;
+  padding-top: 30px;
+  height: 80px;
+  width: 80px;
+  background-color: #f8f8f9;
+}
+.product-imitation.xl {
+  padding: 120px 0;
+}
+.product-desc {
+  padding: 20px;
+  position: relative;
+}
+.ecommerce .tag-list {
+  padding: 0;
+}
+.ecommerce .fa-star {
+  color: #d1dade;
+}
+.ecommerce .fa-star.active {
+  color: #f8ac59;
+}
+.ecommerce .note-editor {
+  border: 1px solid #e7eaec;
+}
+table.shoping-cart-table {
+  margin-bottom: 0;
+}
+table.shoping-cart-table tr td {
+  border: none;
+  text-align: right;
+}
+table.shoping-cart-table tr td.desc,
+table.shoping-cart-table tr td:first-child {
+  text-align: left;
+}
+table.shoping-cart-table tr td:last-child {
+  width: 80px;
+}
+.ibox {
+  clear: both;
+  margin-bottom: 25px;
+  margin-top: 0;
+  padding: 0;
+}
+.ibox.collapsed .ibox-content {
+  display: none;
+}
+.ibox:after,
+.ibox:before {
+  display: table;
+}
+.ibox-title {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 3px 0 0;
+  color: inherit;
+  margin-bottom: 0;
+  padding: 14px 15px 7px;
+  min-height: 48px;
+}
+.ibox-content {
+  background-color: #ffffff;
+  color: inherit;
+  padding: 15px 20px 20px 20px;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0;
+}
+.ibox-footer {
+  color: inherit;
+  border-top: 1px solid #e7eaec;
+  font-size: 90%;
+  background: #ffffff;
+  padding: 10px 15px;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Calibri:400,300,700);
+
+
+
+
+.card {
+    margin-bottom: 30px;
+    border: 0;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    letter-spacing: .5px;
+    border-radius: 8px;
+    -webkit-box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, .05);
+    box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, .05)
+}
+
+.card .card-header {
+    background-color: #fff;
+    border-bottom: none;
+    padding: 24px;
+    border-bottom: 1px solid #f6f7fb;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px
+}
+
+.card-header:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
+}
+
+.card .card-body {
+    padding: 30px;
+    background-color: transparent
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary:disabled {
+    background-color: #4466f2 !important;
+    border-color: #4466f2 !important
+} {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ode used to create this bootstrap snippet, You can copy, paste, change, customize and run the following CSS code to get a result Like the one shown in the preview selection
+
+body{margin-top:20px;}
+.cart-item-thumb {
+    display: block;
+    width: 10rem
+}
+
+.cart-item-thumb>img {
+    display: block;
+    width: 100%
+}
+
+.product-card-title>a {
+    color: #222;
+}
+
+.font-weight-semibold {
+    font-weight: 600 !important;
+}
+
+.product-card-title {
+    display: block;
+    margin-bottom: .75rem;
+    padding-bottom: .875rem;
+    border-bottom: 1px dashed #e2e2e2;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.text-muted {
+    color: #888 !important;
+}
+
+.bg-secondary {
+    background-color: #f7f7f7 !important;
+}
+
+.accordion .accordion-heading {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.font-weight-semibold {
+    font-weight: 600 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock style %}
+{% block content %}
+
+
+
+
+
+
+
+<div class="container pb-5 mt-n2 mt-md-n3">
+    <div class="row">
+        <div class="col-xl-9 col-md-8">
+            {% if cart_items|length != 0 %}
+            <h2 class="h6 d-flex flex-wrap justify-content-between align-items-center px-4 py-3 bg-secondary"><span>Products</span><a class="font-size-sm" href="{% url 'home' %}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left" style="width: 1rem; height: 1rem;"><polyline points="15 18 9 12 15 6"></polyline></svg>Continue shopping</a></h2>
+            {% endif %}
+            <!-- Item-->
+            {% for cart_item in cart_items %}
+            <div class="d-sm-flex justify-content-between my-4 pb-4 border-bottom">
+                
+                <div class="media d-block d-sm-flex text-center text-sm-left">
+                    <a class="cart-item-thumb mx-auto mr-sm-4" href="#"><img src="../media/{{cart_item.item.image}}" alt="Product"></a>
+                    <div class="media-body pt-3">
+                        <h3 class="product-card-title font-weight-semibold border-0 pb-0"><a href="#">{{ cart_item.item.name }}</a></h3>
+                        
+                        <div class="font-size-lg text-primary pt-2">&#x20b9;{{ cart_item.get_total_price }}</div>
+                    </div>
+                </div>
+                <div class="pt-2 pt-sm-0 pl-sm-3 mx-auto mx-sm-0 text-center text-sm-left" style="max-width: 10rem;">
+                    <form method="POST" action="update/{{cart_item.item.id}}/">
+                        {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label for="quantity1">Quantity</label>
+                        
+                        <input type="number" min="1" class="form-control" placeholder="{{ cart_item.quantity}}" name="quantity">
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm btn-block mb-2" type='submit'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw mr-1">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>Update cart</button>
+                        </form>
+                    <a class="btn btn-outline-danger btn-sm btn-block mb-2" href="{% url 'remove-from-cart' cart_item.item.id%}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 mr-1">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>Remove</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+            <!-- Item-->
+            
+        <!-- Sidebar-->
+        <!-- <div class="col-xl-3 col-md-4 pt-3 pt-md-0">
+            <h2 class="h6 px-4 py-3 bg-secondary text-center">Subtotal</h2>
+            <div class="h3 font-weight-semibold text-center py-3">{{ total }}</div>
+            <hr>
+           
+            <a class="btn btn-primary btn-block" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card mr-2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>Proceed to Checkout</a>
+            
+        </div> -->
+    
+
+    {% if cart_items|length != 0 %}
+    <div class="col-xl-3 col-md-4 pt-3 pt-md-0">
+        <h2 class="h6 px-4 py-3 bg-secondary text-center">Subtotal</h2>
+        <div class="h3 font-weight-semibold text-center py-3">&#x20b9;{{ total }}</div>
+        <hr>
+       
+        <a class="btn btn-primary btn-block" href="{% url 'checkout' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card mr-2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>Proceed to Checkout</a>
+        
+    </div>
+</div>
+                <!-- <a class="btn btn-white" href="{% url 'home'%}"><i class="fa fa-arrow-left"></i> Continue shopping</a> -->
+                {% else %}
+
+
+
+
+                <div class="container-fluid mt-100">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Cart</h5>
+                                </div>
+                                <div class="card-body cart">
+                                    <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                        <h3><strong>Your Cart is Empty</strong></h3>
+                                        <h4>Add something to make me happy :)</h4> <a href="{% url 'home'%}" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {% endif %}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <div class="container">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="ibox">
+                <div class="ibox-title">
+                    
+                    <h5>Items in your cart</h5>
+                </div>
+                {% for cart_item in cart_items %}
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table shoping-cart-table">
+                            <tbody>
+                            <tr>
+                                <td width="90">
+                                    <div class="cart-product-imitation" style="background-image:url('../media/{{cart_item.item.image}}')">
+                                    </div>
+                                </td>
+                                <td class="desc">
+                                    <h3>
+                                    <a href="#" class="text-navy">
+                                        {{ cart_item.item.name }}
+                                    </a>
+                                    </h3>
+                                   
+
+                                    <div class="m-t-sm">
+                                        <a href="#" class="text-muted"><i class="fa fa-gift"></i> Add gift package</a>
+                                        |
+                                        <a href="{% url 'remove-from-cart' cart_item.item.id%}" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    $180,00
+                                    <s class="small text-muted">$230,00</s>
+                                </td>
+                                <td width="65">
+                                <form method="POST" action="update/{{cart_item.item.id}}/">
+                                {% csrf_token %}
+                                    
+                                    <input type="number" min="1" class="form-control" placeholder="{{ cart_item.quantity}}" style="width: 150px;" name="quantity">
+                                    <button type="submit">Update</button>
+                                </form>
+                                </td>
+                                <td>
+                                    <h4>
+                                        {{ cart_item.get_total_price}}
+                                    </h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                {% endfor %}
+                
+                
+
+                
+                <div class="ibox-content">
+                {% if cart_items|length != 0 %}
+                    <a class="btn btn-primary pull-right" href="{% url 'checkout'%}"><i class="fa fa fa-shopping-cart"></i> Checkout</a>
+                <a class="btn btn-white" href="{% url 'home'%}"><i class="fa fa-arrow-left"></i> Continue shopping</a>
+                {% else %}
+
+
+
+
+                <div class="container-fluid mt-100">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Cart</h5>
+                                </div>
+                                <div class="card-body cart">
+                                    <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                        <h3><strong>Your Cart is Empty</strong></h3>
+                                        <h4>Add something to make me happy :)</h4> <a href="{% url 'home'%}" class="btn btn-primary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {% endif %}
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Cart Summary</h5>
+                </div>
+                <div class="ibox-content">
+                    <span>
+                        Total
+                    </span>
+                    <h2 class="font-bold">
+                        {{ total }}
+                    </h2>
+
+                    <hr>
+                    <span class="text-muted small">
+                        *For United States, France and Germany applicable sales tax will be applied
+                    </span>
+                    <div class="m-t-sm">
+                        <div class="btn-group">
+                        <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> Checkout</a>
+                        <a href="#" class="btn btn-white btn-sm"> Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Support</h5>
+                </div>
+                <div class="ibox-content text-center">
+                    <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
+                    <span class="small">
+                        Please contact with us if you have any questions. We are avalible 24h.
+                    </span>
+                </div>
+            </div>
+
+            <div class="ibox">
+                <div class="ibox-content">
+
+                    <p class="font-bold">
+                    Other products you may be interested
+                    </p>
+                    <hr>
+                    <div>
+                        <a href="#" class="product-name"> Product 1</a>
+                        <div class="small m-t-xs">
+                            Many desktop publishing packages and web page editors now.
+                        </div>
+                        <div class="m-t text-righ">
+
+                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="#" class="product-name"> Product 2</a>
+                        <div class="small m-t-xs">
+                            Many desktop publishing packages and web page editors now.
+                        </div>
+                        <div class="m-t text-righ">
+
+                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div> {% endcomment %}
+
+{% endblock content %}
