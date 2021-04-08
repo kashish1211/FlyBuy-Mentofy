@@ -2,6 +2,7 @@ from django.db import models
 from PIL import Image
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from phone_field import PhoneField
 
 class Product(models.Model):
 	name = models.CharField(max_length = 100)
@@ -55,6 +56,7 @@ class CheckoutInfo(models.Model):
 	apartment_address = models.CharField(max_length=100)
 	country = CountryField(multiple=False)
 	pin = models.CharField(max_length = 100)
+	phone_number = PhoneField(blank=True, help_text='Contact phone number')
 
 	def __str__(self):
 		return (self.user.username)

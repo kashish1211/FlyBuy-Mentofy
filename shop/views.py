@@ -30,21 +30,21 @@ def product_detail(request, pk):
 @login_required
 def add_cart(request,pk):
     item = get_object_or_404(Product, pk=pk)
-    print(item)
+    
     order_item,created = CartItem.objects.get_or_create(item=item,user=request.user,ordered=False)
-    print(order_item)
+    
     order_qs = Cart.objects.filter(user = request.user, ordered=False)
-    print(order_qs)
+    
     if order_qs.exists():
         order = order_qs[0]
-        print(order.item)
+        
         #if item is already in the cart
-        print(order.item.filter(item__id = item.id).exists())
+        
         if order.item.filter(item__id = item.id).exists():
             order_item.quantity+=1
             order_item.save()
             CartItem.objects.filter(item = item,user = request.user, ordered=False).update(is_selected = True)
-            print(order_item.quantity)
+            
             messages.success(request, f'Your cart has been updated')
             return redirect('home')
         else:
@@ -67,11 +67,11 @@ def remove_cart(request,pk):
     if order_qs.exists():
         order = order_qs[0]
         #if item is already in the cart
-        print(order.item.filter(item__id = item.id).exists())
+        
         if order.item.filter(item__id = item.id).exists():
             order_item = CartItem.objects.filter(item = item,user = request.user, ordered=False)[0]
             
-            print(CartItem.objects.filter(item = item,user = request.user, ordered=False)[0].is_selected)
+           
             CartItem.objects.filter(item = item,user = request.user, ordered=False).update(is_selected = False)
             CartItem.objects.filter(item = item,user = request.user, ordered=False).update(quantity = 1)
             order.item.remove(order_item)
@@ -86,13 +86,12 @@ def remove_cart(request,pk):
 @login_required
 def cart_view(request):
     cart_items = CartItem.objects.filter(user = request.user, ordered=False, is_selected=True)
-    print(cart_items)
     final_price = list(cart_items)
-    print(final_price)
+    
     total = 0
     for item in final_price:
         total += item.get_total_price()
-    print(total)
+    
     context = {
         'cart_items':cart_items,
         'total':total
@@ -107,10 +106,8 @@ def update_cart(request,pk):
         product = get_object_or_404(Product, id = pk)
         item = CartItem.objects.filter(user = request.user, ordered=False, is_selected=True, item = product).first()
         update_qty = request.POST['quantity']
-        print("item =",item)
 
         CartItem.objects.filter(user = request.user, ordered=False, is_selected=True, item = product).update(quantity=update_qty)
-        print("this",request.POST['quantity'])
         messages.success(request, f'Cart updated!')
     return redirect('cart')
    
@@ -119,33 +116,34 @@ def update_cart(request,pk):
 def checkout_view(request):
 
     cart_items = CartItem.objects.filter(user = request.user, ordered=False, is_selected=True)
-    print(cart_items)
+    
     final_price = list(cart_items)
-    print(final_price)
+    
     total = 0
     for item in final_price:
         total += item.get_total_price()
-    print(total)
+    
     
 
 
     if request.method=='POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            # print('form is valid')
-            # print(form.cleaned_data)
+            
             
             address=form.cleaned_data.get('address')
             apartment_address=form.cleaned_data.get('apartment_address')
             country=form.cleaned_data.get('country')
             pin=form.cleaned_data.get('pin')
+            phone_number = form.cleaned_data.get('phone_number')
 
             checkout_info = CheckoutInfo(
                 user = request.user,
                 address = address,
                 apartment_address = apartment_address,
                 country = country,
-                pin = pin
+                pin = pin,
+                phone_number = phone_number
 
             )
             checkout_info.save()

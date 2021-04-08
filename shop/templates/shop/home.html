@@ -75,12 +75,12 @@
  <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
       <div class="col-md-5 p-lg-5 mx-auto my-5">
       {% if user.is_authenticated%}
-        <h1 class="display-4 font-weight-normal">{{ user.username }}</h1>
+        <h1 class="display-4 font-weight-normal">Welcome {{ user.username }}</h1>
       {% else %}
       <h1 class="display-4 font-weight-normal">Login in to Buy</h1>
       {% endif %}
         <p class="lead font-weight-normal">Buy original Apple products at FlyBuy.</p>
-        <a class="btn btn-outline-secondary" href="#">Coming soon</a>
+        <a class="btn btn-outline-secondary" href="{% url 'cart'%}">Go to Cart</a>
       </div>
       <div class="product-device box-shadow d-none d-md-block"></div>
       <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
@@ -97,13 +97,13 @@
                 <a href="{{ product.id }}/"><img class="card-img-top" src="../media/{{product.image}}" alt="Card image cap"></a>
                 <div class="card-body">
                 <a href="{{ product.id }}/"><h5 class="card-title">{{ product.name }}</h5></a>
-                  <p class="card-text">{{ product.price }}</p>
+                  <p class="card-text">&#x20b9;{{ product.price }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group float-right">
                       <a href="{{ product.id }}/" class="btn btn-sm btn-outline-secondary float-right">View</a>
                       
                       <a type="submit" class="btn btn-sm btn-outline-secondary float-right" href="{% url 'add-to-cart' product.id%} " >Add to Cart</a>
-                      {% comment %} <a type="submit" class="btn btn-sm btn-outline-danger" href="{% url 'remove-from-cart' product.id%}">Remove from cart</a> {% endcomment %}
+                      
                       
                     </div>
                     
@@ -118,13 +118,13 @@
       </div>
 
 
-  {% comment %} Pagination {% endcomment %}
+
   {% if products.has_other_pages %}
   <ul class="pagination justify-content-center">
     {% if products.has_previous %}
       <li class='page-item'><a class='page-link' href="?page={{ products.previous_page_number }}">&laquo;</a></li>
     {% else %}
-      {% comment %} <li class="disabled"><span class='page-link'>&laquo;</span></li> {% endcomment %}
+      
     {% endif %}
     {% for i in products.paginator.page_range %}
       {% if products.number == i %}
@@ -136,18 +136,9 @@
     {% if products.has_next %}
       <li  class='page-item'><a class='page-link' href="?page={{ products.next_page_number }}">&raquo;</a></li>
     {% else %}
-      {% comment %} <li class="disabled"><span class='page-link'>&raquo;</span></li> {% endcomment %}
+      
     {% endif %}
   </ul>
 {% endif %}
-
-
-
-
-
-
-
-
-
 
 {% endblock content %}
