@@ -6,6 +6,7 @@ from .forms import CheckoutForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import EmailMessage
 
 def home(request):
     product_list = Product.objects.all()
@@ -154,9 +155,13 @@ def checkout_view(request):
             subject = 'FlyBuy: Thank You for your order'
             message = 'This email confirms your order'
             from_email = settings.EMAIL_HOST_USER
+            print(from_email)
             to_list = [request.user.email]
+            print(to_list)
             send_mail(subject,message,from_email,to_list,fail_silently = True)
-            
+            msg = EmailMessage(subject,
+                       message, to_list)
+            msg.send()
             return redirect('checkout')
 
     else:
